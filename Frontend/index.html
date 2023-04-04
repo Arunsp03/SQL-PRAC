@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Form Example</title>
+  </head>
+  <body>
+    <form id="myForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name"><br><br>
+      <label for="id">ID:</label>
+      <input type="number" id="id" name="id"><br><br>
+      <input type="submit" value="Submit">
+    </form>
+    <div id="data"></div>
+    <script>
+      const form = document.getElementById('myForm');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const name = document.getElementById('name').value;
+        const id = document.getElementById('id').value;
+        fetch("http://localhost:3001/movie",{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id:id,
+                name:name,
+            })
+          })
+        console.log(`Name: ${name}, ID: ${id}`);
+        console.log("success");
+        getdata();
+        
+    });
+    let data=[];
+    async function getdata(){
+       let datas=await fetch("http://localhost:3001/get",{
+            method:"GET",
+        });
+        data=await datas.json();
+        console.log(data);
+        const elem=document.getElementById("data");
+    data.map((item)=>{
+        elem.textContent+="Name:"+item.name+" "+"Id: "+item.id+" ";
+    })
+
+    }
+    </script>
+  </body>
+  </html>
